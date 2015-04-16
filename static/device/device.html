@@ -1,0 +1,166 @@
+<div class="btn btn-primary" ng-click="goBack()">Back</div>
+	
+<div class="page-header" style="margin-top:0px;">
+	<h1>Device {{currentDevice}}</h1>
+</div>
+
+<h2>Meta Data</h2>
+
+<div style="padding:10px;">
+
+	<table style="margin-bottom:10px;">
+		<tr>
+			<th style="padding:5px;">Device Type</th>
+			<td style="padding:5px;">
+				<select ng-model="metadata.devicetype">
+					<option value="">--</option>
+					<option ng-repeat="(deviceType, data) in deviceTypes" value="{{deviceType}}">{{data.metaData.name}}</option>
+				</select>
+			</td>
+			<td>
+			<input type="submit" value="Save Device Type" ng-click="saveMetaData();" class="btn btn-success btn-sm" />
+			</td>
+		</tr>
+		<tr>
+			<th style="padding:5px;">Last Browser Update</th>
+			<td style="padding:5px;">{{lastBrowserUpdate|date:"medium"}}</td>
+		</tr>
+		<tr>
+			<th style="padding:5px;">Last Device Checkin</th>
+			<td style="padding:5px;">{{deviceData.lastSeen|date:"medium"}}</td>
+		</tr>
+		<tr>
+			<th style="padding:5px;">Pending Actions</th>
+			<td style="padding:5px;">
+				{{deviceData.actions.length}}
+			</td>
+			<td>
+			<input type="submit" value="Purge All Actions" ng-click="purgeActions();" class="btn btn-danger btn-sm" />
+			</td>
+		</tr>
+	</table>
+
+</div>
+
+<div ng-if="!deviceData.deviceType">
+
+	<h2>Attributes</h2>
+
+	<div ng-repeat="(profile, data) in deviceData.attributes" style="display:inline-block;padding:20px;min-width:33%;">
+
+		<b style="font-size:22px;">{{profile}}</b>
+		<table>
+			<tr ng-repeat="(att, val) in data">
+				<th style="padding:5px;">
+					{{att}}
+				</th><td style="padding:5px;">
+					{{val}}
+				</td>
+			</tr>
+		</table>
+
+	</div>
+
+	<h2>Send Action</h2>
+
+	<div style="padding:10px;">
+
+		<table>
+		<tr>
+			<th style="padding:5px;">Profile</th>
+			<td style="padding:5px;">
+				<input ng-model="actionData.profile" type="text" placeholder="Profile" />
+			</td>
+			<th style="padding:5px;">Action</th>
+			<td style="padding:5px;">
+				<input ng-model="actionData.action" type="text" placeholder="Action" />
+			</td>
+		</tr>
+		<tr>
+			<th style="padding:5px;">Arguments (as JSON)</th>
+			<td style="padding:5px;" colspan = 3>
+				<textarea ng-model="actionData.arguments" style="width:100%;height:100px;">
+
+				</textarea>
+			</td>
+		</tr>
+		</table>
+
+		<input class="btn btn-success" type="submit" ng-click="sendCustomAction()" value="Send Action" />
+
+	</div>
+
+</div>
+
+<div ng-if="deviceData.deviceType">
+
+	<h2>Attributes</h2>
+
+	<div ng-repeat="profile in deviceTypes[deviceData.deviceType].profileList" style="display:inline-block;padding:20px;min-width:33%;">
+
+		<b style="font-size:22px;">{{profile.metaData.name}}</b>
+		<table>
+			<tr ng-repeat="att in profile.attributeList">
+				<th style="padding:5px;">
+					{{att.metaData.name}}
+				</th><td style="padding:5px;">
+					{{deviceData.attributes[profile.varName][att.varName]}}
+				</td>
+			</tr>
+		</table>
+
+	</div>
+
+	<h2>Send Actions</h2>
+
+	<div style="padding:10px;">
+
+		<div ng-repeat="(key, action) in actions" style="padding-bottom:20px;">
+
+			<b style="font-size:22px;">{{action.name}}</b>
+
+			<table>
+				<tr ng-repeat="arg in action.args">
+					<th style="padding:5px;">{{arg.name}}</th>
+					<td style="padding:5px;">
+						<input ng-model="arg.value" type="text" placeholder="{{arg.name}}" />
+					</td>
+				</tr>
+			</table>
+
+			<input class="btn btn-success" type="submit" ng-click="sendAction(key);" value="Send Action" />
+
+		</div>
+
+		<div>
+
+			<b style="font-size:22px;">Custom Action</b>
+
+			<table>
+			<tr>
+				<th style="padding:5px;">Profile</th>
+				<td style="padding:5px;">
+					<input ng-model="actionData.profile" type="text" placeholder="Profile" />
+				</td>
+				<th style="padding:5px;">Action</th>
+				<td style="padding:5px;">
+					<input ng-model="actionData.action" type="text" placeholder="Action" />
+				</td>
+			</tr>
+			<tr>
+				<th style="padding:5px;">Arguments (as JSON)</th>
+				<td style="padding:5px;" colspan = 3>
+					<textarea ng-model="actionData.arguments" style="width:100%;height:100px;">
+
+					</textarea>
+				</td>
+			</tr>
+			</table>
+
+			<input class="btn btn-success" type="submit" ng-click="sendCustomAction()" value="Send Action" />
+
+		</div>
+
+	</div>
+
+</div>

@@ -1,0 +1,36 @@
+<tabset>
+	<tab heading="Devices">
+
+		<span ng-repeat="device in devices">
+			<div class="btn btn-primary" style="margin:10px;" ng-click="openDevice(device);">{{device}}</div>
+		</span>
+
+	</tab>
+	<tab heading="Device Types">
+
+		<h2>Device Types</h2>
+
+		<div ng-repeat="(deviceType, data) in deviceTypes" style="padding:10px;">
+			<h4>{{data.metaData.name}} ({{deviceType}}) <span class="btn btn-danger" ng-click="deleteDeviceType(deviceType);">Delete</span></h4>
+			<p>{{data.metaData.description}}</p>
+		</div>
+		
+		<h2>Add a Device Type</h2>
+
+		<div>
+
+			<table>
+				<tr>
+					<td style="padding:5px;"><b>JSON</b><br />Paste the Device Type<br />JSON in the textarea.</td>
+					<td style="padding:5px;">
+						<textarea ng-model="newDeviceType.json" style="width:400px;height:100px;"></textarea>
+					</td>
+				</tr>
+			</table>
+
+			<input class="btn btn-success" type="submit" ng-click="addDeviceType()" value="Add Device Type" />
+
+		</div>
+
+	</tab>
+</tabset>
