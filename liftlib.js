@@ -79,9 +79,15 @@ module.exports.LiftLib = function(storage, debug){
 		},
 		'rpc': function(key, data){
 
+			if ("id" in data){
+				respid = data.id;
+			}else{
+				respid = "";
+			}
+
 			var resp = {
 				"jsonrpc": "2.0",
-				"id": data.id,
+				"id": respid,
 				"result": {}
 			};
 
